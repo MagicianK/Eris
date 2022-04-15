@@ -14,6 +14,7 @@ urlpatterns = [
     path('login/', views.login_page, name="login_page"),
     path('', views.login, name="login"),
     path('profile/', ProfileView.as_view(), name='profile'),
+    path('profile/change/', ProfileChangeView.as_view(), name='profile_change'),
     # localhost:8000/register
     path("register/", registerView.as_view(), name="registration"),
 ]

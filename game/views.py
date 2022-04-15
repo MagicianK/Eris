@@ -14,6 +14,10 @@ def guest(request):
 class ProfileView(TemplateView):
     template_name = "user_page.html"
 
+class ProfileChangeView(FormView):
+    template_name = "user_change_page.html"
+    form_class = CustomUserChangeForm
+
 def login_page(request):
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
