@@ -7,6 +7,7 @@
   <body>
     username: {{ user.username }}
     <p>User Image: <img src="{{user.user_avatar.url}}" alt="" width="200" height="200"></p>
+    <p>user image url: {{user.user_avatar.url}}</p>
     <p><a href="{% url 'game:profile_change' %}">Change User Info</a></p>
   </body>
 </html>
