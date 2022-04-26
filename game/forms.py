@@ -28,8 +28,3 @@ class CustomUserChangeForm(UserChangeForm):
     class Meta(UserChangeForm.Meta):
         model = CustomUser
         fields = ('email','username', 'user_avatar')
-
-class LoginForm(forms.ModelForm):
-    class Meta:
-        model = CustomUser
-        fields = ('username', 'password')
