@@ -20,6 +20,7 @@ def guest(request):
 class ProfileView(TemplateView):
     template_name = "user_page.html"
 
+
 class ProfileChangeView(FormView):
     form_class = CustomUserChangeForm
     template_name = "profile_reset.html"

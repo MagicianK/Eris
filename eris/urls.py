@@ -22,5 +22,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('game.urls')),
     path('', include('django.contrib.auth.urls')), # login url, logout url
-    path("convert/", include("guest_user.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
