@@ -60,10 +60,6 @@ a {
   display:block;
   margin-top: 40px;
 }
-.options button:hover{
-  box-shadow: inset -3px -3px 7px #fd9352,
-  inset 3px 3px 5px rgba(253, 147, 82, 0.692);
-}
 
 .rightside button{
   width: 25%;
@@ -78,10 +74,7 @@ a {
   display:block;
   margin-top: 40px;
 }
-.rightside button:hover{
-  box-shadow: inset -3px -3px 7px #fd9352,
-  inset 3px 3px 5px rgba(253, 147, 82, 0.692);
-}
+
 
 .rightside input{
   width: 50%;

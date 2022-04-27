@@ -84,7 +84,3 @@ input{
   margin-bottom: 5px;
   color: #fff;
 }
-button:hover{
-  box-shadow: inset -3px -3px 7px #fd9352,
-  inset 3px 3px 5px rgba(253, 147, 82, 0.692);
-}
