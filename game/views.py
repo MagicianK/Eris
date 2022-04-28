@@ -15,7 +15,11 @@ class ChangePassView(PasswordChangeView):
 
 
 def guest(request):
-    return render(request, 'guest.html')
+    if request.user.is_authenticated:
+        print('redirected')
+        return render(request, 'user_page.html')
+    else:
+        return render(request, 'guest.html')
 
 class ProfileView(TemplateView):
     template_name = "user_page.html"

@@ -4,12 +4,7 @@
 {% block password_reset %}
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
-  <label for="">email:</label>
-  {{form.email}}
-  <label for="">username:</label>
-  {{form.username}}
-  <label for="">user_avatar</label>
-  {{form.user_avatar}}
-  <button type="submit">Save changes</button>
+  {{ form.as_p }}
+  <button type="submit" name="button"></button>
 </form>
 {% endblock password_reset %}
