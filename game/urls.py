@@ -20,4 +20,13 @@ urlpatterns = [
     path('profile/password/', login_required(ChangePassView.as_view(template_name='password_reset.html'), login_url='/login/'), name='password_change'),
     # localhost:8000/register
     path("register/", registerView.as_view(), name="registration"),
+
+
+    #game
+
+    path('game/<str:room_name>/', views.room, name='room_name'),
+    path('game/create/room/', views.createRoom, name='create_room'),
+    path('join/game/', views.joinRoom, name='join_room'),
+
+    #path("game/")
 ]

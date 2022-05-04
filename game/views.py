@@ -3,6 +3,8 @@ from django.urls import reverse_lazy
 from .models import *
 from django.views.generic.edit import CreateView
 from .forms import *
+from django.contrib import messages
+from django.utils.crypto import get_random_string
 from django.views.generic import *
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import login
@@ -56,7 +58,71 @@ def login_page(request):
         form = AuthenticationForm
     return render(request, 'login.html', {'form':form})
 
+
 class registerView(CreateView):
     form_class = CustomUserForm
     success_url = reverse_lazy('login')
     template_name = 'register.html'
+
+
+def room(request, room_name):
+    game = Game.objects.get(room_name=room_name)
+
+    print(game)
+
+    creator = game.creator
+
+    print(creator)
+
+    number = game.number
+
+    return render(request, 'play.html', {
+        'room': room_name,
+        'creator': creator,
+        'number': number,
+    })
+
+
+def createRoom(request):
+    creator = request.user.get_username()
+
+    if request.method == "POST":
+        number = request.POST.get('option')
+
+        if number is not None:
+            room_name = get_random_string(length=50)
+            game = Game(room_name=room_name, creator=creator, number=number)
+            game.save()
+
+            print(number)
+            print(creator)
+            print(room_name)
+
+            print("/game/" + room_name + "/")
+
+            return redirect("/game/" + room_name + "/")
+
+    return render(request, 'create_room.html')
+
+
+def joinRoom(request):
+
+    if request.method == "POST":
+        username = request.POST.get('username')
+        room_name = request.POST.get('room_name')
+
+        print(username)
+        print(room_name)
+
+        if username is not None:
+            if room_name is not None:
+
+                game = Game.objects.get(room_name=room_name)
+
+                if game is not None:
+
+                    messages.success(request, username)
+                    return redirect("/game/" + room_name + "/")
+
+    return render(request, 'join_room.html')
+
