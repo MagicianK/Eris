@@ -32,15 +32,12 @@ AUTH_USER_MODEL = 'game.CustomUser'
 # Application definition
 
 INSTALLED_APPS = [
-    'channels',
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
 	'game',
 ]
 
@@ -73,7 +70,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'eris.wsgi.application'
-ASGI_APPLICATION = 'eris.routing.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -130,9 +126,3 @@ MEDIA_ROOT = BASE_DIR/"game/resources"
 MEDIA_URL = '/resources/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
-}
