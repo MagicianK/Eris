@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script>
+        let wsStart = 'ws://'
+
+        if(location.protocol === 'https') {
+            wsStart = 'wss://'
+        }
+
+        let endpoint = wsStart + window.location.host + '/ws/notification/'
+
+        const socket = new WebSocket(endpoint)
+
+        socket.onopen = async function (e) {
+            console.log('awildi', e)
+        }
+
+        socket.onmessage = async function (e) {
+            const data = JSON.parse(e.data)
+            console.log(data)
+        }
+
+        socket.onerror = async function (e) {
+            console.log('error', e)
+        }
+
+        socket.onclose = async function (e) {
+            console.log('ws connection jabilip qald', e)
+        }
+
+
+        function send_msg() {
+            const message = $('#message').val()
+            socket.send(JSON.stringify({
+                'message': message,
+                'username': '{{ username }}',
+                'lobby': '{{ room }}'
+            }))
+        }
+
+
+    </script>
+
+
+</head>
+<body>
+    <div id="form-div">
+
+        <h2>{{ room }} - {{ username }}</h2>
+
+        <input type="hidden" name="username" id="username" value="{{ username }}">
+        <input type="hidden" name="room_id" id="room_id" value="{{ room_details.id }}">
+        <textarea name="message" id="message" cols="30" rows="10"></textarea>
+        <input id="play" type="button" value="send" onclick="send_msg()">
+    </div>
+</body>
+</html>

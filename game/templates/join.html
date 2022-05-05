@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>room</title>
+</head>
+<body>
+<form action="checkview" method="POST" id="post-form">
+        {% csrf_token %}
+        <textarea name="room_name" id="room_name" cols="30" rows="10"></textarea>
+
+        <textarea name="username" id="username" cols="30" rows="10"></textarea>
+
+        <input type="submit" value="Connect">
+    </form>
+</body>
+</html>

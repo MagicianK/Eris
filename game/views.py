@@ -7,7 +7,7 @@ from django.views.generic import *
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import login
 from django.contrib.auth.views import PasswordChangeView
-
+from .models import Room, Message
 
 def user_profile(request):
     if request.user.is_authenticated:
@@ -55,6 +55,32 @@ def login_page(request):
     else:
         form = AuthenticationForm
     return render(request, 'login.html', {'form':form})
+
+def room(request, room):
+    username = request.GET.get('username')
+    room_details = Room.objects.get(name=room)
+    return render(request, 'room.html', {
+        'username': username,
+        'room': room,
+        'room_details': room_details
+    })
+
+def join(request):
+    return render(request, 'join.html')
+
+def checkview(request):
+    room = request.POST['room_name']
+    username = request.POST['username']
+
+    print(room)
+    print(username)
+
+    if Room.objects.filter(name=room).exists():
+        return redirect('/'+room+'/?username='+username)
+    else:
+        new_room = Room.objects.create(name=room)
+        new_room.save()
+        return redirect('/'+room+'/?username='+username)
 
 class registerView(CreateView):
     form_class = CustomUserForm
