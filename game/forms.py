@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import *
+from django.forms import ModelForm
+
 
 class CustomUserForm(UserCreationForm):
     username = forms.CharField(max_length=30, required=True)
