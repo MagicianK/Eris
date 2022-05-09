@@ -144,10 +144,6 @@
             return bigrams[random(0, len-1)];
         }
 
-        function timer(){
-
-        }
-
         async function randomWord() {
             const spanWord = document.createElement("span");
             spanWord.id = "spanWord";
@@ -183,6 +179,7 @@
 
             input.toLowerCase();
             let bool = input.includes(await tempBigram);
+            bool = input.length !== 2;
             console.log(bool);
 
             if (bool){
@@ -199,6 +196,7 @@
                         tempTestWord = false
                     })
             }
+            tempTestWord = false
             console.log("TestWord " + await tempTestWord)
 
         }
