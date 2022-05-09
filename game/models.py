@@ -30,7 +30,7 @@ class Game(models.Model):
     players = models.TextField(max_length=100000, default='{}')
     finished = models.BooleanField(default=False)
     winner = models.CharField(max_length=5000)
-
+    letterpair = models.CharField(max_length=2, default='xx')
     @database_sync_to_async
     def update_(self, players, status):
         status.players = players

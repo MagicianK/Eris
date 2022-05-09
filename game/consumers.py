@@ -1,5 +1,7 @@
 import json
 from game.models import Game
+import random
+import string
 from django.core import serializers
 from channels.generic.websocket import AsyncWebsocketConsumer
 
@@ -22,7 +24,6 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         lobby = received_data['lobby']
         letterpair = received_data['letterpair']
         wordIsValid = received_data['wordIsValid']
-
         status = None
         added = False
         try:
@@ -31,7 +32,8 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             players = {
                 username: 3
             }
-            await Game.objects.async_create(lobby=lobby, players=json.dumps(players), finished=False, winner='Poka hz')
+            letterpair = ''.join(random.sample(string.ascii_lowercase, 2))
+            await Game.objects.async_create(lobby=lobby, players=json.dumps(players), finished=False, winner='Poka hz', letterpair=letterpair)
             status = await Game.objects.async_get(lobby=lobby)
             added = True
             print('created new game instance')
@@ -39,6 +41,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         if not added:
             statusDict[username] = 3
             await Game.update_(json.dumps(statusDict), status)
+            letterpair = status.letterpair
         if not message or not username:
             return False
         if method == 'JOIN':
