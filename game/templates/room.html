@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="{% static 'css/side-nav.css' %}">
+    <link rel="stylesheet" href="{% static 'css/game.css' %}">
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@5.0.0/bundles/stomp.umd.js"></script>
     <script>
+
+        let num_of_joined = 0;
+
         let wsStart = 'ws://'
 
         if(location.protocol === 'https') {
@@ -32,6 +39,12 @@
             console.log('ws connection jabilip qald', e)
         }
 
+        const client = new StompJs.Client();
+        client.brokerURL = endpoint;
+
+        function sendTimer(){
+
+        }
 
         function send_msg() {
             const message = $('#message').val()
@@ -40,22 +53,153 @@
                 'username': '{{ username }}',
                 'lobby': '{{ room }}'
             }))
+
+            testWord(message)
         }
 
 
     </script>
-
-
 </head>
 <body>
-    <div id="form-div">
 
-        <h2>{{ room }} - {{ username }}</h2>
-
-        <input type="hidden" name="username" id="username" value="{{ username }}">
-        <input type="hidden" name="room_id" id="room_id" value="{{ room_details.id }}">
-        <textarea name="message" id="message" cols="30" rows="10"></textarea>
-        <input id="play" type="button" value="send" onclick="send_msg()">
+    <div class="sidenav">
     </div>
+
+    <div class="rightside">
+        <div id="play_area">
+
+        </div>
+        <div id="word">
+        </div>
+        <div id="form-div">
+
+            <h2>{{ room }} - {{ username }} - {{ userId }}</h2>
+
+            <input type="hidden" name="username" id="username" value="{{ username }}">
+            <input type="hidden" name="room_id" id="room_id" value="{{ room_details.id }}">
+            <textarea name="message" id="message" cols="30" rows="10"></textarea>
+            <input id="play" type="button" value="send" onclick="send_msg()">
+
+        </div>
+    </div>
+
 </body>
+
+    <script>
+        process()
+        let tempBigram = randomWord()
+        let tempTestWord = null
+        let keepalive_sec = 30
+
+
+        function process(){//TODO until num_of_joined
+            for (let i = 1; i <= 5; i++){
+                add_player(i)
+            }
+        }
+
+        function add_player(num){
+            const player = document.createElement("div"),
+            hp = document.createElement("div"),
+            image = document.createElement("img"),
+            name = document.createElement("span")
+
+            player.classList.add("player")
+            hp.classList.add("hp")
+            image.classList.add("player_image_holder")
+            name.classList.add("player_name")
+
+            image.src = "/static/img/profimg/" + random(1, 13) + ".png"
+
+            name.innerText = "hellodarkness"
+
+            for (let i = 1; i <= 3; i++){
+                let hp_image = document.createElement("img")
+                hp_image.src = "/static/img/hp.svg"
+                hp.append(hp_image)
+            }
+
+            player.append(image)
+            player.append(name)
+            player.append(hp)
+
+            document.getElementById("play_area").append(player)
+
+
+        }
+        function random(min, max){
+            return Math.floor( Math.random() * (max - min + 1)) + min;
+        }
+
+        function bigram(str) {
+            let bigrams = [];
+            for (let i = 0; i < str.length - 1; i++)
+            {
+                let s = str[i] + str[i+1];
+                bigrams.push(s);
+            }
+            let len = bigrams.length;
+            return bigrams[random(0, len-1)];
+        }
+
+        function timer(){
+
+        }
+
+        async function randomWord() {
+            const spanWord = document.createElement("span");
+            spanWord.id = "spanWord";
+            document.getElementById("word").append(spanWord);
+
+            {#const response = await fetch("https://random-word-api.herokuapp.com/word?number=1");#}
+            const response = await fetch("https://random-words-api.vercel.app/word");
+            const data = await response.json();
+
+            let s = data[0].word.toLowerCase();
+            console.log(s);
+            let letterpair = bigram(s);
+            console.log(letterpair);
+
+            spanWord.innerText = letterpair;
+            spanWord.style.backgroundColor = "#FE5E32";
+            spanWord.style.borderRadius = "25px";
+            spanWord.style.fontSize= "25pt";
+            spanWord.style.color = "#FFFFFFFF";
+            spanWord.style.padding = "1px 16px";
+
+            return letterpair;
+        }
+
+        //TODO input in parameters from
+        async function testWord(input){
+            const key = "c1f63c78-d784-4148-8803-56619762c011"; //Key (Dictionary):
+            console.log("Bigram: " + await tempBigram);
+            let temp = await (document.getElementById("spanWord").innerText)
+
+            //let input = "worr";
+
+            input.toLowerCase();
+            let bool = input.includes(await tempBigram);
+            console.log(bool);
+
+            if (bool){
+                await fetch("https://www.dictionaryapi.com/api/v3/references/collegiate/json/" + input + "?key=" + key)
+                    .then(response => {
+                        return response.json();
+                    })
+                    .then(response => {
+                        console.log(response[0].shortdef[0]);
+                        tempTestWord = true
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        tempTestWord = false
+                    })
+            }
+            console.log("TestWord " + await tempTestWord)
+
+        }
+
+    </script>
+
 </html>

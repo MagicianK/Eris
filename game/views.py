@@ -59,10 +59,16 @@ def login_page(request):
 def room(request, room):
     username = request.GET.get('username')
     room_details = Room.objects.get(name=room)
+    userId = 0
+
+    if(request.user.is_authenticated):
+        userId = request.user.id
+
     return render(request, 'room.html', {
         'username': username,
         'room': room,
-        'room_details': room_details
+        'room_details': room_details,
+        'userId': userId
     })
 
 def join(request):
