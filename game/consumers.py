@@ -41,4 +41,4 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         lobby = event['lobby']
         letterpair = event['letterpair']
         wordIsValid = event['wordIsValid']
-        await self.send(text_data=json.dumps({'message': message, 'username': username, 'lobby': message, 'letterpair': letterpair, 'wordIsValid': wordIsValid}))
+        await self.send(text_data=json.dumps({'message': message, 'username': username, 'lobby': lobby, 'letterpair': letterpair, 'wordIsValid': wordIsValid}))
