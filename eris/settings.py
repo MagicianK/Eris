@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'game',
     'channels',
-    'channels_redis'
+    'channels_redis',
+    'django_async_orm'
 
 ]
 

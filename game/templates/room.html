@@ -11,6 +11,7 @@
     <script>
 
         let num_of_joined = 0;
+        var users = {}
 
         let wsStart = 'ws://'
 
@@ -24,10 +25,21 @@
 
         socket.onopen = async function (e) {
             console.log('awildi', e)
+            await join_game()
         }
 
         socket.onmessage = async function (e) {
             const data = JSON.parse(e.data)
+            if(data.method === 'JOIN'){
+                const players = JSON.parse(data.status)
+                for(player in players) {
+                    if (!(player in users)){
+                        add_player(player)
+                        users[player] = true
+                    }
+
+                }
+            }
             console.log(data)
         }
 
@@ -42,20 +54,29 @@
         const client = new StompJs.Client();
         client.brokerURL = endpoint;
 
-        function sendTimer(){
-
-        }
-
         async function send_msg() {
             const message = $('#message').val()
             await testWord(message)
 
             await socket.send(JSON.stringify({
+                'method': 'PLAY',
                 'message': message,
                 'username': '{{ username }}',
                 'lobby': '{{ room }}',
                 'letterpair': await tempBigram,
-                'wordIsValid': await tempTestWord
+                'wordIsValid': await tempTestWord,
+                'status': '{}'
+            }))
+        }
+
+        async function join_game() {
+            await socket.send(JSON.stringify({
+                'method': 'JOIN',
+                'message': '1337',
+                'username': '{{ username }}',
+                'lobby': '{{ room }}',
+                'letterpair': await tempBigram,
+                'wordIsValid': false
             }))
         }
 
@@ -88,32 +109,24 @@
 </body>
 
     <script>
-        process()
         let tempBigram = randomWord()
         let tempTestWord = null
         let keepalive_sec = 30
 
-
-        function process(){//TODO until num_of_joined
-            for (let i = 1; i <= 5; i++){
-                add_player(i)
-            }
-        }
-
-        function add_player(num){
+        function add_player(name){
             const player = document.createElement("div"),
             hp = document.createElement("div"),
             image = document.createElement("img"),
-            name = document.createElement("span")
+            nameContainer = document.createElement("span")
 
             player.classList.add("player")
             hp.classList.add("hp")
             image.classList.add("player_image_holder")
-            name.classList.add("player_name")
+            nameContainer.classList.add("player_name")
 
             image.src = "/static/img/profimg/" + random(1, 13) + ".png"
 
-            name.innerText = "hellodarkness"
+            nameContainer.innerText = name
 
             for (let i = 1; i <= 3; i++){
                 let hp_image = document.createElement("img")
@@ -122,7 +135,7 @@
             }
 
             player.append(image)
-            player.append(name)
+            player.append(nameContainer)
             player.append(hp)
 
             document.getElementById("play_area").append(player)
