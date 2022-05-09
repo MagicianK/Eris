@@ -15,6 +15,9 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         received_data = json.loads(text_data['text'])
         message = received_data['message']
         username = received_data['username']
+        lobby = received_data['lobby']
+        letterpair = received_data['letterpair']
+        wordIsValid = received_data['wordIsValid']
 
         if not message or not username:
             return False
@@ -22,7 +25,10 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         response = {
             'type': 'send_message',
             'message': message,
-            'username': username
+            'username': username,
+            'lobby': lobby,
+            'letterpair': letterpair,
+            'wordIsValid': wordIsValid
         }
 
         # print('receivesuccess', event, json.dumps(response))
@@ -32,5 +38,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
     async def send_message(self, event):
         message = event['message']
         username = event['username']
-
-        await self.send(text_data=json.dumps({'message': message, 'username': username}))
+        lobby = event['lobby']
+        letterpair = event['letterpair']
+        wordIsValid = event['wordIsValid']
+        await self.send(text_data=json.dumps({'message': message, 'username': username, 'lobby': message, 'letterpair': letterpair, 'wordIsValid': wordIsValid}))

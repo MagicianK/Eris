@@ -46,15 +46,17 @@
 
         }
 
-        function send_msg() {
+        async function send_msg() {
             const message = $('#message').val()
-            socket.send(JSON.stringify({
+            await testWord(message)
+
+            await socket.send(JSON.stringify({
                 'message': message,
                 'username': '{{ username }}',
-                'lobby': '{{ room }}'
+                'lobby': '{{ room }}',
+                'letterpair': await tempBigram,
+                'wordIsValid': await tempTestWord
             }))
-
-            testWord(message)
         }
 
 
