@@ -38,13 +38,14 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             added = True
             print('created new game instance')
         statusDict = json.loads(status.players)
-        if not added:
-            statusDict[username] = 3
-            await Game.update_(json.dumps(statusDict), status)
-            letterpair = status.letterpair
+
         if not message or not username:
             return False
         if method == 'JOIN':
+            if not added:
+                statusDict[username] = 3
+                await Game.update_(json.dumps(statusDict), status)
+                letterpair = status.letterpair
             response = {
                 'type': 'send_message',
                 'method': 'JOIN',
@@ -59,6 +60,23 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             await self.channel_layer.group_send(self.group_name, response)
             return
         elif method == 'PLAY':
+            if not wordIsValid:
+                statusDict[username] = statusDict[username]-1
+                print('lolik')
+                await Game.update_(json.dumps(statusDict), status)
+            response = {
+                'type': 'send_message',
+                'method': 'PLAY',
+                'message': message,
+                'username': username,
+                'lobby': lobby,
+                'letterpair': letterpair,
+                'wordIsValid': wordIsValid,
+                'status': json.dumps(statusDict),
+                'move': '1337'
+            }
+            await self.channel_layer.group_send(self.group_name, response)
+
             ind = 0
 
             for key, value in statusDict.items():
@@ -75,12 +93,28 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 next_user = dict_list[ind + 1][0]
             response = {
                 'type': 'send_message',
-                'method': 'PLAY',
-                'message': message,
+                'method': 'MOVE',
+                'message': '1337',
                 'username': username,
                 'lobby': lobby,
                 'letterpair': letterpair,
-                'wordIsValid': wordIsValid,
+                'wordIsValid': '1337',
+                'status': json.dumps(statusDict),
+                'move': next_user
+            }
+            await self.channel_layer.group_send(self.group_name, response)
+            return
+        elif method == 'START':
+            dict_list = list(statusDict.items())
+            next_user = dict_list[0][0]
+            response = {
+                'type': 'send_message',
+                'method': 'MOVE',
+                'message': '1337',
+                'username': username,
+                'lobby': lobby,
+                'letterpair': letterpair,
+                'wordIsValid': '1337',
                 'status': json.dumps(statusDict),
                 'move': next_user
             }
