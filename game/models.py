@@ -28,10 +28,15 @@ class Message(models.Model):
 class Game(models.Model):
     lobby = models.CharField(max_length=5000)
     players = models.TextField(max_length=100000, default='{}')
+    rounds = models.TextField(max_length=100000, default='{}')
     finished = models.BooleanField(default=False)
     winner = models.CharField(max_length=5000)
     letterpair = models.CharField(max_length=2, default='xx')
     @database_sync_to_async
-    def update_(self, players, status):
+    def update_players(self, players, status):
         status.players = players
+        status.save()
+    @database_sync_to_async
+    def update_rounds(self, rounds, status):
+        status.rounds = rounds
         status.save()

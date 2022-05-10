@@ -58,6 +58,8 @@
                 }
             } else if(data.method === 'MOVE') {
                 move_handler(data)
+            } else if(data.method === 'PLAY') {
+                play_handler(data)
             }
             console.log(data)
         }
@@ -76,10 +78,6 @@
         async function send_msg() {
             const message = $('#message').val()
             let wordIsValid = await testWord(message)
-
-            if(!wordIsValid) {
-                minusHp('{{ username }}')
-            }
 
             await socket.send(JSON.stringify({
                 'method': 'PLAY',
@@ -129,6 +127,14 @@
                 $('#message').addClass('opacity-hundred')
                 $('#play').removeClass('opacity-zero')
                 $('#play').addClass('opacity-hundred')
+            }
+        }
+
+        function play_handler(data) {
+            wordIsValid = data.wordIsValid
+
+            if(!wordIsValid) {
+                minusHp(data.username)
             }
         }
 

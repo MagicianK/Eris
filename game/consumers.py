@@ -7,6 +7,14 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 
 
 class NotificationConsumer(AsyncWebsocketConsumer):
+
+    def check_for_result(self, statusDict, roundsDict):
+        sum = 0
+        for key, value in statusDict.items():
+            sum += min(1, value)
+        lst = -1
+
+
     async def websocket_connect(self, event):
         self.group_name = 'notification'
 
@@ -32,20 +40,33 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             players = {
                 username: 3
             }
+            rounds = {
+                username: 0
+            }
             letterpair = ''.join(random.sample(string.ascii_lowercase, 2))
-            await Game.objects.async_create(lobby=lobby, players=json.dumps(players), finished=False, winner='Poka hz', letterpair=letterpair)
+
+            await Game.objects.async_create(lobby=lobby
+                                            , players=json.dumps(players)
+                                            , rounds=json.dumps(rounds)
+                                            , finished=False
+                                            , winner='Poka hz'
+                                            , letterpair=letterpair)
+
             status = await Game.objects.async_get(lobby=lobby)
             added = True
             print('created new game instance')
         statusDict = json.loads(status.players)
-
+        roundsDict = json.loads(status.rounds)
         if not message or not username:
             return False
         if method == 'JOIN':
             if not added:
                 statusDict[username] = 3
-                await Game.update_(json.dumps(statusDict), status)
+                await Game.update_players(json.dumps(statusDict), status)
                 letterpair = status.letterpair
+
+                roundsDict[username] = 0
+                await Game.update_rounds(json.dumps(roundsDict), status)
             response = {
                 'type': 'send_message',
                 'method': 'JOIN',
@@ -60,10 +81,12 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             await self.channel_layer.group_send(self.group_name, response)
             return
         elif method == 'PLAY':
+            roundsDict[username] = roundsDict[username]+1
+            await Game.update_rounds(json.dumps(roundsDict), status)
             if not wordIsValid:
                 statusDict[username] = statusDict[username]-1
-                print('lolik')
-                await Game.update_(json.dumps(statusDict), status)
+                await Game.update_players(json.dumps(statusDict), status)
+                self.check_for_result(statusDict, roundsDict)
             response = {
                 'type': 'send_message',
                 'method': 'PLAY',
