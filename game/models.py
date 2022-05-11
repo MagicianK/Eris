@@ -4,10 +4,10 @@ from channels.db import database_sync_to_async
 
 # Create your models here.
 from django.contrib.auth.models import AbstractUser
-
+from random import randint
 class CustomUser(AbstractUser):
     # field to store user picture
-    user_avatar = models.ImageField(upload_to="user_avatars", default='NULL')
+    user_avatar = models.ImageField(upload_to="user_avatars", default=f'user_avatars/profimg/DEFAULT_{randint(1, 13)}.png')
 
     # returning username when called
     def __str__(self) -> str:

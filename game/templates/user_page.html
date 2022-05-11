@@ -16,7 +16,11 @@
   <body>
     <div class="sidenav">
       <div class="user">
-        <a href="{% url 'game:profile' %}"><img src="{{user.user_avatar.url}}"  alt="" width="150" height="150" onload="loadImage(this)" onerror="loadImage(this)"></a>
+        {% if user.socialaccount_set.all.0.get_avatar_url and "DEFAULT_" in user.user_avatar.url %}
+         <a href="{% url 'game:profile' %}"><img src="{{user.socialaccount_set.all.0.get_avatar_url}}" alt="" width="150" height="150"></a>
+        {% else %}
+          <a href="{% url 'game:profile' %}"><img src="{{user.user_avatar.url}}" alt="" width="150" height="150"></a>
+        {% endif %}
         <p>{{ user.username }}</p>
       </div>
       <div class="options">
