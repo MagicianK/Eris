@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+ <html lang="en" dir="ltr">
+   <head>
+     {% load socialaccount %}
+     {% load static %}
+     <meta charset="utf-8">
+     <title></title>
+     <link rel="stylesheet" href="{% static 'css/style-reg.css' %}">
+     <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+
+   </head>
+   <body>
+     <div class="center">
+       <div class="logo">
+         <img src="{% static 'img/logo_adams.png' %}" >
+       </div>
+       <div class="content">
+         {% if form.errors %}
+           <p>Please enter a correct username and password. Note that both fields may be case-sensitive.</p>
+         {% endif %}
+         <form method="post" action="{% url 'login' %}">
+           {% csrf_token %}
+           <label for="">USERNAME</label>
+           {{ form.username }}
+           <label for="">PASSWORD</label>
+           {{ form.password }}
+
+           <div class="register">
+             <button type="submit">Login</button>
+           </div>
+         </form>
+         <form action="{% provider_login_url 'google' %}" method="post">
+           {% csrf_token %}
+           <button type="submit"><i class='bx bxl-google icon'></i>Sign in with GoogleOGLE</button>
+         </form>
+       </div>
+     </div>
+   </body>
+ </html>

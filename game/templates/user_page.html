@@ -20,9 +20,8 @@
         <p>{{ user.username }}</p>
       </div>
       <div class="options">
-           <a href="{% url 'game:join' %}"><button>Join Room <i class='bx bx-door-open icon'></i></button></a>
-           <a href="{% url 'logout' %}"><button>Log out <i class='bx bx-log-out' ></i></button></a>
-      </div>
+          <a href="{% url 'game:join' %}"><button>Join Room <i class='bx bx-door-open icon'></i></button></a>
+          <a href="{% url 'account_logout' %}"><button>Log out <i class='bx bx-log-out' ></i></button></a>      </div>
     </div>
     <div class="rightside">
       {% block button %}<a href="{% url 'game:profile_change' %}"><button type="button" name="button">Change profile <i class='bx bxs-user' ></i></button></a>{% endblock button %}

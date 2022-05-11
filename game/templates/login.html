@@ -28,7 +28,10 @@
             <button type="submit">Login</button>
           </div>
         </form>
-        <button><i class='bx bxl-google icon'></i>Sign in with Google</button>
+        <form action="{% provider_login_url 'google' %}" method="post">
+           {% csrf_token %}
+           <button type="submit"><i class='bx bxl-google icon'></i>Sign in with GoogleOGLE</button>
+         </form>
       </div>
     </div>
   </body>
