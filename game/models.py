@@ -40,3 +40,7 @@ class Game(models.Model):
     def update_rounds(self, rounds, status):
         status.rounds = rounds
         status.save()
+    @database_sync_to_async
+    def update_letterpair(self, letterpair, status):
+        status.letterpair = letterpair
+        status.save()

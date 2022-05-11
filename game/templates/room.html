@@ -24,6 +24,7 @@
         var users = {}
         let status
         let username = '{{ username }}'
+        let winner
 
         let wsStart = 'ws://'
 
@@ -60,6 +61,8 @@
                 move_handler(data)
             } else if(data.method === 'PLAY') {
                 play_handler(data)
+            } else if (data.method === 'END') {
+
             }
             console.log(data)
         }
@@ -72,9 +75,6 @@
             console.log('ws connection jabilip qald', e)
         }
 
-        const client = new StompJs.Client();
-        client.brokerURL = endpoint;
-
         async function send_msg() {
             const message = $('#message').val()
             let wordIsValid = await testWord(message)
@@ -85,7 +85,7 @@
                 'username': '{{ username }}',
                 'lobby': '{{ room }}',
                 'letterpair': tempBigram,
-                'wordIsValid': wordIsValid,
+                'wordIsValid': await wordIsValid,
                 'status': status
             }))
         }
@@ -106,12 +106,13 @@
         }
 
         function minusHp(username) {
+
             $('.player').each(function() {
+
                 let nickname = $(this).children('span').text()
-                if(nickname === username) {
+                if (nickname === username) {
                     $(this).children('.hp').children().last().remove()
                 }
-
             })
         }
 
@@ -128,14 +129,24 @@
                 $('#play').removeClass('opacity-zero')
                 $('#play').addClass('opacity-hundred')
             }
+            if (data.move === null) {
+                console.log(data.move)
+                winner = data.last
+                $('#notifications').text(winner + " is a Winner!")
+                console.log(winner)
+            }
         }
 
         function play_handler(data) {
             wordIsValid = data.wordIsValid
 
+            console.log("minushp wordvalid?" + wordIsValid )
+
             if(!wordIsValid) {
                 minusHp(data.username)
             }
+            setLetterpair(data.letterpair)
+            setInput(data.message, data.username)
         }
 
         async function join_game() {
@@ -155,9 +166,13 @@
 <body>
 
     <div class="sidenav">
+        <div class="log">
+
+        </div>
     </div>
 
     <div class="rightside">
+        <h2>{{ room }} : {{ username }}</h2>
         <div id="notifications">
 
         </div>
@@ -167,9 +182,6 @@
         <div id="word">
         </div>
         <div id="form-div">
-
-            <h2>{{ room }} - {{ username }} - {{ userId }}</h2>
-
             <input type="hidden" name="username" id="username" value="{{ username }}">
             <input type="hidden" name="room_id" id="room_id" value="{{ room_details.id }}">
             <textarea class="opacity-zero" name="message" id="message" cols="30" rows="10"></textarea>
@@ -186,11 +198,12 @@
 
         function add_player(name){
             const player = document.createElement("div"),
-            hp = document.createElement("div"),
-            image = document.createElement("img"),
-            nameContainer = document.createElement("span")
+                hp = document.createElement("div"),
+                image = document.createElement("img"),
+                nameContainer = document.createElement("span")
 
             player.classList.add("player")
+            player.id = name
             hp.classList.add("hp")
             image.classList.add("player_image_holder")
             nameContainer.classList.add("player_name")
@@ -219,9 +232,17 @@
 
 
         async function setLetterpair(letterpair) {
-            const spanWord = document.createElement("span");
+            tempBigram = letterpair
+            let spanWord = '';
+
+
+            if (document.getElementById("spanWord")){
+                spanWord = document.getElementById("spanWord");
+            } else {
+                spanWord = document.createElement("span");
             spanWord.id = "spanWord";
             document.getElementById("word").append(spanWord);
+            }
 
             spanWord.innerText = letterpair;
             spanWord.style.backgroundColor = "#FE5E32";
@@ -230,17 +251,19 @@
             spanWord.style.color = "#FFFFFFFF";
             spanWord.style.padding = "1px 16px";
 
-            tempBigram = letterpair
         }
 
-        //TODO input in parameters from
+        async function setInput(inputWord, name) {
+            $('.log').append("<span class='logName'>" +  name + ": " + "</span><span class='logInput'>" + inputWord  + "</span><br>")
+        }
+
         async function testWord(input){
             const key = "c1f63c78-d784-4148-8803-56619762c011"; //Key (Dictionary):
             input.toLowerCase();
-            let bool = input.includes(tempBigram);
-            bool = input.length !== 2;
-            console.log(bool);
-            tempTestWord = false
+            let bool = (input.includes(tempBigram)) && (input.length > 2);
+            console.log("checkbool " + bool + " " + input + " " + tempBigram)
+            //console.log(bool);
+            //tempTestWord = false
 
             if (bool){
                 await fetch("https://www.dictionaryapi.com/api/v3/references/collegiate/json/" + input + "?key=" + key)
@@ -257,8 +280,8 @@
                         bool = false
                     })
             }
-            console.log('!!', tempTestWord)
-            return tempTestWord
+            console.log('!!', bool)
+            return bool
 
         }
 

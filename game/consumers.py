@@ -76,7 +76,8 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 'letterpair': letterpair,
                 'wordIsValid': wordIsValid,
                 'status': json.dumps(statusDict),
-                'move': 'none'
+                'move': 'none',
+                'last': 'none'
             }
             await self.channel_layer.group_send(self.group_name, response)
             return
@@ -87,6 +88,10 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 statusDict[username] = statusDict[username]-1
                 await Game.update_players(json.dumps(statusDict), status)
                 self.check_for_result(statusDict, roundsDict)
+
+            await Game.update_letterpair(''.join(random.sample(string.ascii_lowercase, 2)), status)
+            letterpair = status.letterpair
+
             response = {
                 'type': 'send_message',
                 'method': 'PLAY',
@@ -96,7 +101,8 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 'letterpair': letterpair,
                 'wordIsValid': wordIsValid,
                 'status': json.dumps(statusDict),
-                'move': '1337'
+                'move': '1337',
+                'last': 'none'
             }
             await self.channel_layer.group_send(self.group_name, response)
 
@@ -110,10 +116,22 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 ind += 1
             dict_list = list(statusDict.items())
             next_user = None
+            last_user = None
+
             if ind + 1 == len(dict_list):
                 next_user = dict_list[0][0]
+
+                for items in dict_list:
+                    if items[1] == 0:
+                        dict_list.remove(items)
+
+                if len(dict_list) == 1:
+                    last_user = dict_list[0][0]
+                    next_user = None
+
             else:
                 next_user = dict_list[ind + 1][0]
+
             response = {
                 'type': 'send_message',
                 'method': 'MOVE',
@@ -123,7 +141,8 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 'letterpair': letterpair,
                 'wordIsValid': '1337',
                 'status': json.dumps(statusDict),
-                'move': next_user
+                'move': next_user,
+                'last': last_user
             }
             await self.channel_layer.group_send(self.group_name, response)
             return
@@ -139,7 +158,8 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 'letterpair': letterpair,
                 'wordIsValid': '1337',
                 'status': json.dumps(statusDict),
-                'move': next_user
+                'move': next_user,
+                'last': 'none'
             }
             await self.channel_layer.group_send(self.group_name, response)
             return
@@ -154,8 +174,9 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         lobby = event['lobby']
         status = event['status']
         move = event['move']
+        last = event['last']
         letterpair = event['letterpair']
         wordIsValid = event['wordIsValid']
         await self.send(text_data=json.dumps(
-            {'method': method, 'message': message, 'username': username, 'lobby': lobby, 'status': status, 'move': move, 'letterpair': letterpair,
+            {'method': method, 'message': message, 'username': username, 'lobby': lobby, 'status': status, 'move': move, 'last': last, 'letterpair': letterpair,
              'wordIsValid': wordIsValid}))
