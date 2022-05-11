@@ -12,7 +12,7 @@ from .models import Room, Message
 def user_profile(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
-            form = CustomUserChangeForm(request.POST, instance=request.user)
+            form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)
             if form.is_valid():
                 form.save()
         else:
@@ -82,11 +82,11 @@ def checkview(request):
     print(username)
 
     if Room.objects.filter(name=room).exists():
-        return redirect('/'+room+'/?username='+username)
+        return redirect('room/'+room+'/?username='+username)
     else:
         new_room = Room.objects.create(name=room)
         new_room.save()
-        return redirect('/'+room+'/?username='+username)
+        return redirect('room/'+room+'/?username='+username)
 
 class registerView(CreateView):
     form_class = CustomUserForm

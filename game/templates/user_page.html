@@ -11,13 +11,17 @@
   <body>
     <div class="sidenav">
       <div class="user">
-        <a href="{% url 'game:profile' %}"><img src="{{user.user_avatar.url}}" alt="" width="150" height="150"></a>
+        {% if user.socialaccount_set.all.0.get_avatar_url %}
+         <a href="{% url 'game:profile' %}"><img src="{{user.socialaccount_set.all.0.get_avatar_url}}" alt="" width="150" height="150"></a>
+        {% else %}
+          <a href="{% url 'game:profile' %}"><img src="{{user.user_avatar.url}}" alt="" width="150" height="150"></a>
+        {% endif %}
         <p>{{ user.username }}</p>
       </div>
       <div class="options">
         <button>Join Room <i class='bx bx-door-open icon'></i></button>
         <button>Create Room <i class='bx bxs-door-open' ></i></button>
-        <a href="{% url 'logout' %}"><button>Log out <i class='bx bx-log-out' ></i></button></a>
+        <a href="{% url 'account_logout' %}"><button>Log out <i class='bx bx-log-out' ></i></button></a>
       </div>
     </div>
     <div class="rightside">

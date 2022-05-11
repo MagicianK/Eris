@@ -7,7 +7,7 @@ from django.contrib.auth.models import AbstractUser
 
 class CustomUser(AbstractUser):
     # field to store user picture
-    user_avatar = models.ImageField(upload_to="user_avatars", default='NULL')
+    user_avatar = models.ImageField(upload_to="user_avatars", default='user_avatars/profimg/1.png')
 
     # returning username when called
     def __str__(self) -> str:
