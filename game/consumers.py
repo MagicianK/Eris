@@ -133,17 +133,17 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             if ind + 1 == len(dict_list):
                 next_user = dict_list[0][0]
 
-                for items in dict_list:
-                    if items[1] == 0:
-                        dict_list.remove(items)
-
-                if len(dict_list) == 1:
-                    last_user = dict_list[0][0]
-                    next_user = None
-                    await Game.update_gameStatus(last_user, status)
-
             else:
                 next_user = dict_list[ind + 1][0]
+
+            for items in dict_list:
+                if items[1] == 0:
+                    dict_list.remove(items)
+
+            if len(dict_list) == 1:
+                last_user = dict_list[0][0]
+                next_user = None
+                await Game.update_gameStatus(last_user, status)
 
             response = {
                 'type': 'send_message',
@@ -154,8 +154,8 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 'letterpair': letterpair,
                 'wordIsValid': '1337',
                 'status': json.dumps(statusDict),
-                'move': next_user,
-                'last': last_user
+                'last': last_user,
+                'move': next_user
             }
             await self.channel_layer.group_send(self.group_name, response)
             return
@@ -172,6 +172,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 'wordIsValid': '1337',
                 'status': json.dumps(statusDict),
                 'move': next_user,
+                'last': 'none'
             }
             await self.channel_layer.group_send(self.group_name, response)
             return
@@ -188,6 +189,15 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         move = event['move']
         letterpair = event['letterpair']
         wordIsValid = event['wordIsValid']
+        last = event['last']
         await self.send(text_data=json.dumps(
-            {'method': method, 'message': message, 'username': username, 'lobby': lobby, 'status': status, 'move': move, 'letterpair': letterpair,
-             'wordIsValid': wordIsValid}))
+            {'method': method,
+             'message': message,
+             'username': username,
+             'lobby': lobby,
+             'status': status,
+             'move': move,
+             'last': last,
+             'letterpair': letterpair,
+             'wordIsValid': wordIsValid
+             }))
