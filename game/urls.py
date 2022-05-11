@@ -12,7 +12,7 @@ app_name = 'game'
 # structure is path(string_url, view_name, name=url_name)
 urlpatterns = [
     # index (main) page login_required(ProfileChangeView.as_view(), login_url='/login/')
-    path('/', views.guest, name='guest'),
+    path('', views.guest, name='guest'),
     path('login_page/', views.login_page, name="login_page"),
     path('login/<int:user_id>', views.login, name="login"),
     path('profile/', login_required(ProfileView.as_view(), login_url='/login/'), name='profile'),
