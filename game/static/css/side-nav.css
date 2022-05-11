@@ -77,21 +77,22 @@ a {
 
 
 .rightside input{
-  width: 50%;
-  padding: 25px;
-  background: #000000;
-  border: none;
-  text-align:center;
-  font-size: 17px;
-  font-weight: 600;
-  color: #fff;
-  margin:0 auto;
-  display:block;
+    width: 50%;
+    padding: 25px;
+    background: #000000;
+    border: none;
+    text-align:center;
+    font-size: 17px;
+    font-weight: 600;
+    color: #fff;
+    margin:0 auto;
+    display:block;
+    border-radius: 25px;
 
 }
 .rightside input:hover{
-  box-shadow: inset -3px -3px 7px #fd9352,
-  inset 3px 3px 5px rgba(253, 147, 82, 0.692);
+    box-shadow: inset -3px -3px 7px #fd9352,
+    inset 3px 3px 5px rgba(253, 147, 82, 0.692);
 }
 input::placeholder {
   color: white;

@@ -13,15 +13,8 @@
         <img src="{% static 'img/logo_adams.png' %}" >
       </div>
       <div class="content">
-        <form>
-          <label for="username">Game ID</label>
-            <input type="text" placeholder="" id="room_id">
-
-          <label for="password">Nickname</label>
-            <input type="text" placeholder="" id="nickname">
-        </form>
-        <button>Join</button>
-        <div class="or">
+          <a href="{% url 'game:join' %}"><button>Join Room <i class='bx bx-door-open icon'></i></button></a>
+          <div class="or">
           <label>or</label>
           <button onclick="location.href = 'login';" class="float-left submit-button" >Login</button>
           <button onclick="location.href = 'register';" class="float-left submit-button" >Register</button>

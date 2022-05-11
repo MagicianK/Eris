@@ -72,6 +72,10 @@ def room(request, room):
     })
 
 def join(request):
+    if request.user.is_authenticated:
+        user = request.user.username
+        return render(request, 'join.html', {'user': user})
+
     return render(request, 'join.html')
 
 def checkview(request):
