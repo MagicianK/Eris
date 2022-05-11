@@ -44,3 +44,8 @@ class Game(models.Model):
     def update_letterpair(self, letterpair, status):
         status.letterpair = letterpair
         status.save()
+    @database_sync_to_async
+    def update_gameStatus(self, winner, status):
+        status.winner = winner
+        status.finished = True
+        status.save()

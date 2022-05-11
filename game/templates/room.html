@@ -117,6 +117,7 @@
         }
 
         async function move_handler(data) {
+            $('#start').addClass('opacity-zero')
             $('#notifications').text(data.move + '\'s turn')
             if(username !== data.move) {
                 $('#message').removeClass('opacity-hundred')
