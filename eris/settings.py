@@ -22,9 +22,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-fxv3fy6-pv4tz3@(=y#lj8ifxivfyo*!3lu%%wc4#fsscqk%hr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['erisgameword.herokuapp.com', '127.0.0.1']
 AUTH_USER_MODEL = 'game.CustomUser'
 
 # Application definition
@@ -84,7 +84,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('localhost', 6379)],
+            "hosts": ['redis-18934.c135.eu-central-1-1.ec2.cloud.redislabs.com:18934'],
         },
     },
 }
@@ -157,6 +157,7 @@ LOGOUT_REDIRECT_URL = "/login_page/"
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
