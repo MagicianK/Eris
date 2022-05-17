@@ -13,8 +13,7 @@ import os
 import django
 
 from pathlib import Path
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "admin.settings")
-django.setup()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-fxv3fy6-pv4tz3@(=y#lj8ifxivfyo*!3lu%%wc4#fsscqk%hr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
+DEBUG = True
 
 ALLOWED_HOSTS = ['erisgameword.herokuapp.com', '127.0.0.1']
 AUTH_USER_MODEL = 'game.CustomUser'
