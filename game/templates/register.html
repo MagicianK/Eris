@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-    {% load socialaccount %}
     {% load static %}
     <meta charset="utf-8">
     <title></title>
@@ -22,11 +21,8 @@
             <button type="submit">Register</button>
           </div>
         </form>
-        <form action="{% provider_login_url 'google' %}" method="post">
-           {% csrf_token %}
-           <button type="submit"><i class='bx bxl-google icon'></i>Sign in with GoogleOGLE</button>
-         </form>
-          </div>
+        <button><i class='bx bxl-google icon'></i>Sign in with Google</button>
+      </div>
     </div>
   </body>
 </html>
