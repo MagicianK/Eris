@@ -9,8 +9,8 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-import os
-import django
+#import os
+#import django
 
 from pathlib import Path
 
@@ -87,7 +87,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": ["redis://:pae87d1b4ca2b586082eb9d4ef48b047ca7dfd6a6f3c99c77af4651ef4faedd68@ec2-52-209-73-239.eu-west-1.compute.amazonaws.com:31200"]
+            "hosts": [('localhost', 6379)]
         },
     },
 }
@@ -160,7 +160,7 @@ LOGOUT_REDIRECT_URL = "/login_page/"
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT  = os.path.join(BASE_DIR, 'staticfiles')
+#STATIC_ROOT  = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
