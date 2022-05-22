@@ -22,5 +22,13 @@ urlpatterns = [
     path("register/", registerView.as_view(), name="registration"),
     path('join/', views.join, name="join"),
     path('join/room/<str:room>/', views.room, name="room"),
-    path('join/checkview', views.checkview, name="checkview")
+    path('join/join_room', views.join_room, name="join_room"),
+
+    path('room_creation/', views.room_creation, name="room_creation"),
+    path('room_creation/room/<str:room>/', views.room, name="room"),
+    path('room_creation/create_room', views.create_room, name="create_room"),
+    path('public_rooms/', views.public_rooms, name="public_rooms"),
+    path('public_rooms/join/room/<str:room>/', views.room, name="room"),
+    path('scoreboard/', views.scoreboard, name="scoreboard"),
+    #path('room_creation/', views.room_creation, name="room_creation"),
 ]

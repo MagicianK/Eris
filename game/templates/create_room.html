@@ -60,9 +60,11 @@
          <img src="{% static 'img/logo_adams.png' %}" >
        </div>
        <div class="content">
-           <form action="join_room" method="POST" id="post-form">
+           <form action="create_room" method="POST" id="post-form">
                {% csrf_token %}
                <textarea name="room_name" id="room_name" cols="25" rows="5" placeholder="Room"></textarea>
+               <label for="">is public</label>
+               <input type="checkbox" id="is_public" name="is_public" checked>
                <textarea name="username" id="username" cols="25" rows="5" placeholder="Username">{{ user }}</textarea>
                <input type="submit" value="Connect">
             </form>

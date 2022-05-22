@@ -25,6 +25,9 @@
       </div>
       <div class="options">
           <a href="{% url 'game:join' %}"><button>Join Room <i class='bx bx-door-open icon'></i></button></a>
+          <a href="{% url 'game:room_creation' %}"><button>Create Room <i class='bx bx-door-open icon'></i></button></a>
+          <a href="{% url 'game:public_rooms' %}"><button>Public Rooms <i class='bx bx-door-open icon'></i></button></a>
+          <a href="{% url 'game:scoreboard' %}"><button>Scoreboard <i class='bx bx-door-open icon'></i></button></a>
           <a href="{% url 'account_logout' %}"><button>Log out <i class='bx bx-log-out' ></i></button></a>      </div>
     </div>
     <div class="rightside">

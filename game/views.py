@@ -7,8 +7,8 @@ from django.views.generic import *
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import login
 from django.contrib.auth.views import PasswordChangeView
-from .models import Room, Message
-
+from .models import Room, Message, CustomUser
+from django.utils.crypto import get_random_string
 def user_profile(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
@@ -55,11 +55,17 @@ def login_page(request):
     else:
         form = AuthenticationForm
     return render(request, 'login.html', {'form':form})
-
+def scoreboard(request):
+    users = CustomUser.objects.all()
+    return render(request, 'scoreboard.html', {'users': users})
 def room(request, room):
     username = request.GET.get('username')
+    if request.user.is_authenticated:
+        username = request.user.username
+    if username == None:
+        username = get_random_string(length=10)
     room_details = Room.objects.get(name=room)
-    userId = 0
+    userId = -1
 
     if(request.user.is_authenticated):
         userId = request.user.id
@@ -77,8 +83,30 @@ def join(request):
         return render(request, 'join.html', {'user': user})
 
     return render(request, 'join.html')
+def public_rooms(request):
+    public_rooms = Room.objects.filter(public=True)
+    return render(request, 'public_games.html', {'public_rooms': public_rooms})
+def room_creation(request):
+    if request.user.is_authenticated:
+        user = request.user.username
+        return render(request, 'create_room.html', {'user': user})
 
-def checkview(request):
+    return render(request, 'create_room.html')
+def create_room(request):
+    room = request.POST['room_name']
+    is_public = request.POST.get('is_public', '') == 'on'
+    username = request.POST['username']
+
+    print(room)
+    print(username)
+
+    if Room.objects.filter(name=room).exists():
+        print('exists')
+    else:
+        new_room = Room.objects.create(name=room, public=is_public)
+        new_room.save()
+        return redirect('room/'+room+'/?username='+username)
+def join_room(request):
     room = request.POST['room_name']
     username = request.POST['username']
 
@@ -88,9 +116,7 @@ def checkview(request):
     if Room.objects.filter(name=room).exists():
         return redirect('room/'+room+'/?username='+username)
     else:
-        new_room = Room.objects.create(name=room)
-        new_room.save()
-        return redirect('room/'+room+'/?username='+username)
+        print('nothing')
 
 class registerView(CreateView):
     form_class = CustomUserForm

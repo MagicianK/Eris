@@ -1,10 +1,11 @@
 import json
+from game.models import CustomUser
 from game.models import Game
 import random
 import string
 from django.core import serializers
 from channels.generic.websocket import AsyncWebsocketConsumer
-
+from asgiref.sync import sync_to_async
 
 class NotificationConsumer(AsyncWebsocketConsumer):
 
@@ -39,6 +40,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         message = received_data['message']
         username = received_data['username']
         lobby = received_data['lobby']
+        userId = received_data['userId']
         letterpair = received_data['letterpair']
         wordIsValid = received_data['wordIsValid']
         status = None
@@ -47,7 +49,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             status = await Game.objects.async_get(lobby=lobby)
         except Game.DoesNotExist:
             players = {
-                username: 3
+                username:  3
             }
             rounds = {
                 username: 0
@@ -65,6 +67,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             added = True
             print('created new game instance')
         statusDict = json.loads(status.players)
+        print('statusDict: ', statusDict)
         roundsDict = json.loads(status.rounds)
         if not message or not username:
             return False
@@ -83,6 +86,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 'method': 'JOIN',
                 'message': '1337',
                 'username': username,
+                'userId': userId,
                 'lobby': lobby,
                 'letterpair': letterpair,
                 'wordIsValid': wordIsValid,
@@ -110,6 +114,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 'message': message,
                 'username': username,
                 'lobby': lobby,
+                'userId': userId,
                 'letterpair': letterpair,
                 'wordIsValid': wordIsValid,
                 'status': json.dumps(statusDict),
@@ -143,13 +148,22 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             if len(dict_list) == 1:
                 last_user = dict_list[0][0]
                 next_user = None
-                await Game.update_gameStatus(last_user, status)
+                print('last_user', last_user, userId)
+                custuser = await CustomUser.objects.async_get(username=last_user)
+
+                print('score: ', custuser)
+                await custuser.update_score(custuser, custuser.score + 10)
+                # custuser = await sync_to_async(CustomUser.objects.get, thread_sensitive=True)(id=userId)
+                # custuser.score = custuser.score + 10 # change field
+                # sync_to_async(custuser.save, thread_sensitive=True)2
+                # await Game.update_gameStatus(last_user, status)
 
             response = {
                 'type': 'send_message',
                 'method': 'MOVE',
                 'message': '1337',
                 'username': username,
+                'userId': userId,
                 'lobby': lobby,
                 'letterpair': letterpair,
                 'wordIsValid': '1337',
@@ -167,6 +181,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 'method': 'MOVE',
                 'message': '1337',
                 'username': username,
+                'userId': userId,
                 'lobby': lobby,
                 'letterpair': letterpair,
                 'wordIsValid': '1337',
@@ -184,6 +199,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         method = event['method']
         message = event['message']
         username = event['username']
+        userId = event['userId']
         lobby = event['lobby']
         status = event['status']
         move = event['move']
@@ -194,6 +210,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             {'method': method,
              'message': message,
              'username': username,
+             'userId': userId,
              'lobby': lobby,
              'status': status,
              'move': move,

@@ -5,18 +5,22 @@ from channels.db import database_sync_to_async
 # Create your models here.
 from django.contrib.auth.models import AbstractUser
 from random import randint
+from asgiref.sync import sync_to_async
 class CustomUser(AbstractUser):
     # field to store user picture
     user_avatar = models.ImageField(upload_to="user_avatars", default=f'user_avatars/profimg/DEFAULT_{randint(1, 13)}.png')
-
+    score = models.IntegerField(default=0)
     # returning username when called
     def __str__(self) -> str:
         return self.username
-
+    @database_sync_to_async
+    def update_score(self, user, score):
+        user.score = score
+        user.save()
 
 class Room(models.Model):
     name = models.CharField(max_length=50)
-
+    public = models.BooleanField(default=True)
 
 class Message(models.Model):
     value = models.CharField(max_length=500)
