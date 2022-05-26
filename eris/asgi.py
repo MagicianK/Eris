@@ -8,6 +8,10 @@ https://docs.djangoproject.com/en/4.0/howto/deployment/asgi/
 """
 
 import os
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'eris.settings')
+django.setup()
+
 import game.routing
 import django
 import channels.asgi
@@ -16,8 +20,6 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
 channel_layer = channels.asgi.get_channel_layer()
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'eris.settings')
-django.setup()
 
 application = ProtocolTypeRouter({
     'http': get_asgi_application(),
