@@ -9,16 +9,14 @@ https://docs.djangoproject.com/en/4.0/howto/deployment/asgi/
 
 import os
 import django
+from channels.routing import ProtocolTypeRouter, URLRouter
+from django.core.asgi import get_asgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'eris.settings')
 django.setup()
 
-import game.routing
-import channels.asgi
 from channels.auth import AuthMiddlewareStack
-from channels.routing import ProtocolTypeRouter, URLRouter
-from django.core.asgi import get_asgi_application
-channel_layer = channels.asgi.get_channel_layer()
+from game.routing import websocket_urlpatterns
 
 
 application = ProtocolTypeRouter({
