@@ -104,7 +104,7 @@ DATABASES = {
 
 import dj_database_url
 dj_from_env = dj_database_url.config(conn_max_age=600)
-DATABASE['default'].updata(db_from_env)
+DATABASES['default'].update(db_from_env)
 
 AUTHENTICATION_BACKENDS = [
      # Needed to login by username in Django admin, regardless of `allauth`
