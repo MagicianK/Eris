@@ -26,6 +26,9 @@ SECRET_KEY = 'django-insecure-fxv3fy6-pv4tz3@(=y#lj8ifxivfyo*!3lu%%wc4#fsscqk%hr
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+CSRF_TRUSTED_ORIGINS = [
+    'https://eris2.herokuapp.com'
+]
 
 ALLOWED_HOSTS = ['*']
 AUTH_USER_MODEL = 'game.CustomUser'
