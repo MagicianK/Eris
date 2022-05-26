@@ -14,9 +14,9 @@ import channels.asgi
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
+channel_layer = channels.asgi.get_channel_layer()
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'eris.settings')
-channel_layer = channels.asgi.get_channel_layer()
 django.setup()
 
 application = ProtocolTypeRouter({
