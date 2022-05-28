@@ -149,7 +149,12 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 last_user = dict_list[0][0]
                 next_user = None
                 print('last_user', last_user, userId)
-                custuser = await CustomUser.objects.async_get(username=last_user)
+                custuser = None
+                try:
+                    custuser = await CustomUser.objects.async_get(username=last_user)
+                except CustomUser.DoesNotExist:
+                    custuser = None
+                
 
                 print('score: ', custuser)
                 if custuser != None:
