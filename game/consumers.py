@@ -152,7 +152,8 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 custuser = await CustomUser.objects.async_get(username=last_user)
 
                 print('score: ', custuser)
-                await custuser.update_score(custuser, custuser.score + 10)
+                if custuser != None:
+                    await custuser.update_score(custuser, custuser.score + 10)
                 # custuser = await sync_to_async(CustomUser.objects.get, thread_sensitive=True)(id=userId)
                 # custuser.score = custuser.score + 10 # change field
                 # sync_to_async(custuser.save, thread_sensitive=True)2
