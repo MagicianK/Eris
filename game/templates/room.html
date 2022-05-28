@@ -26,11 +26,11 @@
         let username = '{{ username }}'
         let winner
 
-        let wsStart = 'ws://'
+        let wsStart = 'wss://'
 
-        if(location.protocol === 'https') {
-            wsStart = 'wss://'
-        }
+       // if(location.protocol === 'https') {
+       //     wsStart = 'wss://'
+       // }
 
         let endpoint = wsStart + window.location.host + '/ws/notification/'
 
