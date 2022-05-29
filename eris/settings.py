@@ -32,7 +32,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 ALLOWED_HOSTS = ['*']
 AUTH_USER_MODEL = 'game.CustomUser'
-
+ACCOUNT_DEFAULT_HTTP_PROTOCOL='https'
 # Application definition
 
 INSTALLED_APPS = [
