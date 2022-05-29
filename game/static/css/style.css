@@ -81,3 +81,52 @@ button{
   margin-bottom: 5px;
   color: #fff;
 }
+
+.contentText {
+
+    display: flex;
+    flex-direction: column;
+
+    color: white;
+
+    align-items: center;
+    align-content: center;
+    justify-content: space-evenly;
+
+    opacity:1;
+    visibility:visible;
+    width: 330px;
+    height: auto;
+    background: #FD9352;
+    padding: 30px 35px 40px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    box-shadow: -6px -6px 10px rgba(255, 255, 255, 0.8),
+               6px 6px 10px rgba(0, 0, 0, 0.2);
+
+}
+
+.textHolder {
+
+    color: white;
+
+    font-size: 15pt;
+    font-family: "Coming Soon";
+
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+    align-content: center;
+    justify-content: space-evenly;
+    gap: 5px 5px;
+
+}
+
+.orangeSpan {
+    padding: 1px 16px;
+
+    background-color: #FE5E32;
+    border-radius: 25px;
+
+}

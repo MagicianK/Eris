@@ -1,12 +1,40 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
+      {% load static %}
     <meta charset="utf-8">
-    <title></title>
+    <title>Scoreboard</title>
+      <link rel="stylesheet" href="{% static 'css/style.css' %}">
   </head>
+  <style>
+      body{
+          margin: 150px;
+
+          display: flex;
+
+          gap: 50px 50px;
+
+          justify-content: space-evenly;
+          align-content: space-evenly;
+
+          min-height: fit-content;
+
+      }
+  </style>
   <body>
-    {% for user in users %}
-        <p>{{user.username}}: {{user.score}}</p>
-    {% endfor %}
+  <div class="contentText">
+      <table style="color: white; text-align: center; border-collapse: separate; border-spacing: 20px">
+          <tr>
+              <th>Username</th>
+              <th>Score</th>
+          </tr>
+          {% for user in users %}
+              <tr>
+                <td class="orangeSpan">{{ user.username }}</td>
+                <td>{{ user.score }}</td>
+              </tr>
+          {% endfor %}
+      </table>
+  </div>
   </body>
 </html>
