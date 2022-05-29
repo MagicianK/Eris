@@ -119,26 +119,19 @@ AUTHENTICATION_BACKENDS = [
  ]
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
-SOCIALACCOUNT_PROVIDERS = {
-     'google': {
-         'SCOPE': [
-             'profile',
-             'email',
-         ],
-         'AUTH_PARAMS': {
-             'access_type': 'online',
-         }
-     }
- }
+#SOCIALACCOUNT_PROVIDERS = {
+#     'google': {
+#         'SCOPE': [
+#             'profile',
+#             'email',
+#         ],
+#         'AUTH_PARAMS': {
+#             'access_type': 'online',
+#         }
+#     }
+#}
 
 #Additional configuration settings
-ACCOUNT_AUTHENTICATION_METHOD = "email"
-SOCIALACCOUNT_QUERY_EMAIL = True
-ACCOUNT_LOGOUT_ON_GET= True
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
-SOCIALACCOUNT_AUTO_SIGNUP = True
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
