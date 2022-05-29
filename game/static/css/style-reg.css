@@ -71,7 +71,7 @@ input{
 .icon{
   font-size:30px;
 }
-.register button{
+button{
   width: 100%;
   font-family: 'Coming Soon';
   margin-top: 10px;
@@ -84,7 +84,7 @@ input{
   margin-bottom: 5px;
   color: #fff;
 }
-.register a{
+a{
    width: 100%;
    font-family: 'Coming Soon';
    margin-top: 10px;
