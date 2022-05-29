@@ -53,7 +53,7 @@ INSTALLED_APPS = [
      'allauth.socialaccount.providers.google',
 
 ]
-SITE_ID = 1
+SITE_ID = 2
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -132,10 +132,13 @@ SOCIALACCOUNT_PROVIDERS = {
  }
 
 #Additional configuration settings
+ACCOUNT_AUTHENTICATION_METHOD = "email"
 SOCIALACCOUNT_QUERY_EMAIL = True
 ACCOUNT_LOGOUT_ON_GET= True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+SOCIALACCOUNT_AUTO_SIGNUP = True
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -154,7 +157,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-SOCIALACCOUNT_LOGIN_ON_GET=True
 
 LANGUAGE_CODE = 'en-us'
 
